@@ -19,8 +19,13 @@ class CounterProvider extends ChangeNotifier {
     }
   }
 
-  void setCounter(int newValue) {
-    _counter = newValue;
+  void setCounter(int value) {
+    _counter = value;
+    notifyListeners();
+  }
+
+  void reset() {
+    _counter = 0;
     notifyListeners();
   }
 }

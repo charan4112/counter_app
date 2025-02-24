@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Age Counter with Animations"),
+        title: const Text("Age Counter with Reset"),
         backgroundColor: Colors.blueAccent,
         elevation: 5,
       ),
@@ -69,11 +69,14 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               // Age Progress Bar
-              LinearProgressIndicator(
-                value: counterProvider.counter / 99,
-                backgroundColor: Colors.grey[300],
-                color: getProgressBarColor(counterProvider.counter),
-                minHeight: 10,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: LinearProgressIndicator(
+                  value: counterProvider.counter / 99,
+                  backgroundColor: Colors.grey[300],
+                  color: getProgressBarColor(counterProvider.counter),
+                  minHeight: 12,
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -95,30 +98,16 @@ class HomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: ElevatedButton(
-                      onPressed: counterProvider.decrement,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      ),
-                      child: const Text("Decrease Age", style: TextStyle(color: Colors.white)),
-                    ),
+                  _customButton(
+                    text: "Decrease Age",
+                    color: Colors.redAccent,
+                    onPressed: counterProvider.decrement,
                   ),
                   const SizedBox(width: 20),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                    child: ElevatedButton(
-                      onPressed: counterProvider.increment,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.greenAccent[700],
-                        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      ),
-                      child: const Text("Increase Age", style: TextStyle(color: Colors.white)),
-                    ),
+                  _customButton(
+                    text: "Increase Age",
+                    color: Colors.greenAccent[700]!,
+                    onPressed: counterProvider.increment,
                   ),
                 ],
               ),
@@ -126,6 +115,29 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: counterProvider.reset,
+        backgroundColor: Colors.blueAccent,
+        tooltip: "Reset Age",
+        child: const Icon(Icons.refresh, color: Colors.white),
+      ),
+    );
+  }
+
+  // Custom Button Widget
+  Widget _customButton({required String text, required Color color, required VoidCallback onPressed}) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        shadowColor: Colors.black.withOpacity(0.2),
+        elevation: 5,
+      ),
+      child: Text(text, style: const TextStyle(color: Colors.white)),
     );
   }
 }
