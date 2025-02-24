@@ -5,7 +5,6 @@ import '../providers/counter_provider.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  // Function to determine message and background color based on age value
   Map<String, dynamic> getMilestone(int age) {
     if (age <= 12) {
       return {"message": "You're a child!", "color": Colors.lightBlueAccent};
@@ -20,15 +19,10 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  // Function to determine progress bar color
   Color getProgressBarColor(int age) {
-    if (age <= 33) {
-      return Colors.green;
-    } else if (age <= 67) {
-      return Colors.yellow;
-    } else {
-      return Colors.red;
-    }
+    if (age <= 33) return Colors.green;
+    if (age <= 67) return Colors.yellow;
+    return Colors.red;
   }
 
   @override
@@ -38,20 +32,25 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Age Counter with Enhancements"),
+        title: const Text("Age Tracker"),
         backgroundColor: Colors.blueAccent,
         elevation: 5,
       ),
       body: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
-        color: milestone["color"],
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [milestone["color"], Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Animated message with fade-in effect
               AnimatedOpacity(
                 opacity: 1.0,
                 duration: const Duration(milliseconds: 600),
@@ -62,7 +61,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 15),
 
-              // Age Counter Display
               Card(
                 elevation: 5,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -76,7 +74,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Age Progress Bar
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
@@ -88,7 +85,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Age Slider
               Slider(
                 value: counterProvider.counter.toDouble(),
                 min: 0,
@@ -102,7 +98,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Buttons with Animated Effects
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -121,7 +116,6 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Reset Button with Icon
               ElevatedButton.icon(
                 onPressed: counterProvider.reset,
                 style: ElevatedButton.styleFrom(
@@ -141,7 +135,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  // Custom Animated Button Widget
   Widget _animatedButton({required String text, required Color color, required VoidCallback onPressed}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
