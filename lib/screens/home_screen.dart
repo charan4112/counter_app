@@ -5,7 +5,7 @@ import '../providers/counter_provider.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  // Function to determine message and background color based on counter value
+  // Function to determine message and background color based on age value
   Map<String, dynamic> getMilestone(int age) {
     if (age <= 12) {
       return {"message": "You're a child!", "color": Colors.lightBlueAccent};
@@ -20,6 +20,17 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+  // Function to determine progress bar color
+  Color getProgressBarColor(int age) {
+    if (age <= 33) {
+      return Colors.green;
+    } else if (age <= 67) {
+      return Colors.yellow;
+    } else {
+      return Colors.red;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final counterProvider = Provider.of<CounterProvider>(context);
@@ -28,11 +39,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: milestone["color"],
       appBar: AppBar(
-        title: const Text("Age Counter"),
+        title: const Text("Age Counter with Slider"),
         backgroundColor: Colors.blueAccent,
         elevation: 5,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -46,6 +58,31 @@ class HomeScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             const SizedBox(height: 20),
+            
+            // Age Progress Bar
+            LinearProgressIndicator(
+              value: counterProvider.counter / 99, // Normalized between 0 and 1
+              backgroundColor: Colors.grey[300],
+              color: getProgressBarColor(counterProvider.counter),
+              minHeight: 10,
+            ),
+            const SizedBox(height: 20),
+
+            // Age Slider
+            Slider(
+              value: counterProvider.counter.toDouble(),
+              min: 0,
+              max: 99,
+              divisions: 99,
+              label: "${counterProvider.counter}",
+              activeColor: getProgressBarColor(counterProvider.counter),
+              onChanged: (double newValue) {
+                counterProvider.setCounter(newValue.toInt());
+              },
+            ),
+
+            const SizedBox(height: 20),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
