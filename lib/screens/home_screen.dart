@@ -38,7 +38,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Age Counter with Reset"),
+        title: const Text("Age Counter with Enhancements"),
         backgroundColor: Colors.blueAccent,
         elevation: 5,
       ),
@@ -47,11 +47,11 @@ class HomeScreen extends StatelessWidget {
         curve: Curves.easeInOut,
         color: milestone["color"],
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Fade-in animation for the message
+              // Animated message with fade-in effect
               AnimatedOpacity(
                 opacity: 1.0,
                 duration: const Duration(milliseconds: 600),
@@ -60,11 +60,19 @@ class HomeScreen extends StatelessWidget {
                   style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 15),
 
-              Text(
-                '${counterProvider.counter} years old',
-                style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
+              // Age Counter Display
+              Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    '${counterProvider.counter} years old',
+                    style: const TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Colors.black),
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -94,50 +102,67 @@ class HomeScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Buttons with animation
+              // Buttons with Animated Effects
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _customButton(
+                  _animatedButton(
                     text: "Decrease Age",
                     color: Colors.redAccent,
                     onPressed: counterProvider.decrement,
                   ),
                   const SizedBox(width: 20),
-                  _customButton(
+                  _animatedButton(
                     text: "Increase Age",
                     color: Colors.greenAccent[700]!,
                     onPressed: counterProvider.increment,
                   ),
                 ],
               ),
+              const SizedBox(height: 20),
+
+              // Reset Button with Icon
+              ElevatedButton.icon(
+                onPressed: counterProvider.reset,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueAccent,
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                label: const Text("Reset Age", style: TextStyle(color: Colors.white)),
+              ),
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: counterProvider.reset,
-        backgroundColor: Colors.blueAccent,
-        tooltip: "Reset Age",
-        child: const Icon(Icons.refresh, color: Colors.white),
-      ),
     );
   }
 
-  // Custom Button Widget
-  Widget _customButton({required String text, required Color color, required VoidCallback onPressed}) {
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        shadowColor: Colors.black.withOpacity(0.2),
-        elevation: 5,
+  // Custom Animated Button Widget
+  Widget _animatedButton({required String text, required Color color, required VoidCallback onPressed}) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 5, offset: const Offset(0, 2))
+        ],
       ),
-      child: Text(text, style: const TextStyle(color: Colors.white)),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+        child: Text(text, style: const TextStyle(color: Colors.white)),
+      ),
     );
   }
 }
